@@ -159,7 +159,7 @@ local function read_file(path)
     local lst = {}
 
     for i = 1,content:len() do
-        char = string.sub(content, i, i)
+        local char = string.sub(content, i, i)
         if char == 'I' then
             _start = CreatePoint(#matrix+1, #lst+1)
         elseif char == 'E' then
@@ -177,7 +177,11 @@ local function read_file(path)
 
     for i = 1, #matrix do
         for j = 1, #matrix[i] do
-            io.write(isWall(matrix, CreatePoint(i, j)) and '0' or ' ')
+            if matrix[i][j] == 'I' then
+                io.write('I')
+            else
+                io.write(isWall(matrix, CreatePoint(i, j)) and '0' or ' ')
+            end
         end
         io.write('\n')
     end
@@ -206,10 +210,17 @@ for k,v in pairs(result_path._points) do
     matrix[v._x][v._y] = 'x'
 end
 
+matrix[_start._x][_start._y] = 'I'
+matrix[_end._x][_end._y] = 'E'
+
 for i = 1, #matrix do
     for j = 1, #matrix[i] do
         if matrix[i][j] == 'x' then
             io.write('.')
+        elseif matrix[i][j] == 'I' then
+            io.write('I')
+         elseif matrix[i][j] == 'E' then
+            io.write('E')
         else
             io.write(isWall(matrix, CreatePoint(i, j)) and '0' or ' ')
         end
