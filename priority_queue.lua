@@ -1,11 +1,4 @@
---[[  Priority Queue implemented in lua, based on a binary heap.
-
-
-]]--
-
-
 local floor = math.floor
-
 
 local PriorityQueue = {}
 PriorityQueue.__index = PriorityQueue
@@ -21,14 +14,7 @@ setmetatable(
     }
 )
 
-
 function PriorityQueue:initialize()
-    --[[  Initialization.
-
-    Example:
-        PriorityQueue = require("priority_queue")
-        pq = PriorityQueue()
-    ]]--
     self.heap = {}
     self.current_size = 0
 end
@@ -42,7 +28,6 @@ function PriorityQueue:size()
 end
 
 function PriorityQueue:swim()
-    -- Swim up on the tree and fix the order heap property.
     local heap = self.heap
     local floor = floor
     local i = self.current_size
@@ -57,19 +42,12 @@ function PriorityQueue:swim()
 end
 
 function PriorityQueue:put(v, p)
-    --[[ Put an item on the queue.
-
-    Args:
-        v: the item to be stored
-        p(number): the priority of the item
-    ]]--
     self.heap[self.current_size + 1] = {v, p}
     self.current_size = self.current_size + 1
     self:swim()
 end
 
 function PriorityQueue:sink()
-    -- Sink down on the tree and fix the order heap property.
     local size = self.current_size
     local heap = self.heap
     local i = 1
@@ -96,7 +74,6 @@ function PriorityQueue:min_child(i)
 end
 
 function PriorityQueue:pop()
-    -- Remove and return the top priority item
     local heap = self.heap
     local retval = heap[1][1]
     heap[1] = heap[self.current_size]

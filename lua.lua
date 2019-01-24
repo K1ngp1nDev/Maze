@@ -66,10 +66,6 @@ function CreatePath()
     return Path
 end
 
-
-
--- bh = PriorityQueue()
-
 function heuristic(p1, p2)
   return math.abs(p1._x - p2._x) + math.abs(p1._y - p2._y)
 end
@@ -109,13 +105,12 @@ function print_table(tbl, p)
     print(str)
 end
 
-
 function a_star_search(start, goal, map)
     local queue = dofile("priority_queue.lua")
     local path = CreatePath()
     path = path + start
 
-    print("start ", start)
+    print("start", start)
     print("goal ", goal)
 
     queue:put(path, weight(path, goal))
@@ -132,7 +127,6 @@ function a_star_search(start, goal, map)
                 filtered_neighbors[#filtered_neighbors+1] = v
             end
         end
-        -- print_table(filtered_neighbors, best_path:last())
 
         for k,v in pairs(filtered_neighbors) do
             local new_path = CreatePath()
@@ -141,17 +135,17 @@ function a_star_search(start, goal, map)
             end
             new_path = new_path + CreatePoint(v._x, v._y)
             if v == goal then
-                print("count: ", counter)
-                print("length: ", new_path:length())
+                print(string.format("ways:        %d", counter))
+                print(string.format("best length: %d", new_path:length().."\n"))
                 return new_path
             end
             queue:put(new_path, weight(new_path, goal))
         end
     end
 
-    local xyi = CreatePath()
-    xyi = xyi + CreatePoint(-1, -1)
-    return xyi
+    local result = CreatePath()
+    result = result + CreatePoint(-1, -1)
+    return result
 end
 
 local function read_file(path)
@@ -215,20 +209,10 @@ end
 for i = 1, #matrix do
     for j = 1, #matrix[i] do
         if matrix[i][j] == 'x' then
-            io.write('`')
+            io.write('.')
         else
-            io.write(isWall(matrix, CreatePoint(i, j)) and '#' or ' ')
+            io.write(isWall(matrix, CreatePoint(i, j)) and '0' or ' ')
         end
     end
     io.write('\n')
 end
--- print(result_path)
-
--- write_file("A-star.txt", fileContent)
--- local start = 'I'
--- local finish = 'E'
--- print(fileContent);
--- matrix = {{}}
--- matrix.insert
-
--- a_star_search(graph, start, finish) --
