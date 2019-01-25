@@ -181,16 +181,45 @@ local function read_file(path)
     return matrix, _start, _end
 end
 
-local function write_file(path, content)
-    local file = open(path, "w")
+local function write_file(path, tbl)
+    local file = io.open(path, "w")
     if not file then 
       return nil 
     end
     io.output(path)
-    io.write(content)
-    
+
+    for i = 1, #tbl do
+        for j = 1, #tbl[i] do
+            if tbl[i][j] == 'x' then
+                io.write('.')
+            elseif tbl[i][j] == 'I' then
+                io.write('I')
+            elseif tbl[i][j] == 'E' then
+                io.write('E')
+            else
+                io.write(isWall(tbl, CreatePoint(i, j)) and '0' or ' ')
+            end
+        end
+        io.write('\n')
+    end
     file:close()
-    return content
+end
+
+local function print_maze(tbl)
+    for i = 1, #tbl do
+        for j = 1, #tbl[i] do
+            if tbl[i][j] == 'x' then
+                io.write('.')
+            elseif tbl[i][j] == 'I' then
+                io.write('I')
+            elseif tbl[i][j] == 'E' then
+                io.write('E')
+            else
+                io.write(isWall(tbl, CreatePoint(i, j)) and '0' or ' ')
+            end
+        end
+        io.write('\n')
+    end
 end
 
 local matrix, _start, _end = read_file("Maze.txt")
@@ -204,17 +233,5 @@ end
 matrix[_start._x][_start._y] = 'I'
 matrix[_end._x][_end._y] = 'E'
 
-for i = 1, #matrix do
-    for j = 1, #matrix[i] do
-        if matrix[i][j] == 'x' then
-            io.write('.')
-        elseif matrix[i][j] == 'I' then
-            io.write('I')
-         elseif matrix[i][j] == 'E' then
-            io.write('E')
-        else
-            io.write(isWall(matrix, CreatePoint(i, j)) and '0' or ' ')
-        end
-    end
-    io.write('\n')
-end
+print_maze(matrix)
+write_file("new_maze.txt", matrix)
