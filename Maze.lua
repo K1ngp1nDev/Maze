@@ -6,15 +6,15 @@ function CreatePoint(x, y)
     Point.__index = Point
 
     local mt = {
-        __call = function (self)
-            setmetatable({}, self)
-            return self
+        __call = function (Point)
+            setmetatable({}, Point)
+            return Point
         end,
-        __tostring = function(self)
-            return "("..tostring(self._x)..", "..tostring(self._y)..")"
+        __tostring = function(Point)
+            return "("..tostring(Point._x)..", "..tostring(Point._y)..")"
         end,
-        __eq = function(self, other)
-            return self._x == other._x and self._y == other._y
+        __eq = function(Point, other)
+            return Point._x == other._x and Point._y == other._y
         end
     }
 
@@ -22,7 +22,7 @@ function CreatePoint(x, y)
 
     Point._x, Point._y = x, y
     function Point:neighbors()
-        return {CreatePoint(self._x+1, self._y), CreatePoint(self._x, self._y+1), CreatePoint(self._x-1, self._y), CreatePoint(self._x, self._y-1)}
+        return {CreatePoint(Point._x+1, Point._y), CreatePoint(Point._x, Point._y+1), CreatePoint(Point._x-1, Point._y), CreatePoint(Point._x, Point._y-1)}
     end
     return Point
 end
@@ -32,35 +32,35 @@ function CreatePath()
     Path.__index = Path
 
     local mt = {
-        __call = function (self)
-            setmetatable({}, self)
-            return self
+        __call = function (Point)
+            setmetatable({}, Point)
+            return Point
         end,
-        __tostring = function(self)
+        __tostring = function(Point)
             local str = ""
-            for key,val in pairs(self._points) do
+            for key,val in pairs(Point._points) do
                 str = str..tostring(val).."->"
             end
             return str
         end,
-        __add = function(self, p)
-            if type(self._points) == 'nil' then
-                self._points = {p}
+        __add = function(Path, p)
+            if type(Path._points) == 'nil' then
+                Path._points = {p}
             else
-                self._points[#self._points + 1] = p
+                Path._points[#Path._points + 1] = p
             end
-            return self
+            return Path
         end
     }
 
     setmetatable(Path, mt)
 
     function Path:length()
-        return #self._points
+        return #Path._points
     end
 
     function Path:last()
-        return self._points[#self._points]
+        return Path._points[#Path._points]
     end
 
     return Path
@@ -175,17 +175,8 @@ local function read_file(path)
     end
     matrix[#matrix + 1] = lst
 
-    for i = 1, #matrix do
-        for j = 1, #matrix[i] do
-            if matrix[i][j] == 'I' then
-                io.write('I')
-            else
-                io.write(isWall(matrix, CreatePoint(i, j)) and '0' or ' ')
-            end
-        end
-        io.write('\n')
-    end
-
+    print(content)
+    
     file:close()
     return matrix, _start, _end
 end
